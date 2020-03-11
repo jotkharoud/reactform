@@ -1,26 +1,124 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component{
+    
+   state ={
+
+    obj :{
+    username: '',
+       email: '',
+       password: '',
+       confirmpass: '',
+       error : '',
+   },
+        list : []
 }
 
-export default App;
+   newError = () =>{
+    this.setState({error : ''})
+}
+
+
+  onhandleSubmit = (event) =>{
+       event.preventDefault()
+
+         
+       this.setState({
+           ...this.state,
+           list: [...this.state.list,this.state.obj]
+       },
+       ) 
+       setTimeout(()=>console.log(this.state.list),0)
+
+
+
+      if(!this.state.username){
+           return this.setState({ error :"Enter Username"})
+       }
+       if(!this.state.email){
+        return this.setState ({ error: "Enter Email"})
+    }
+       if(!this.state.password){
+           return this.setState ({ error: "Enter Password"})
+       }
+       if(this.state.password !== this.state.confirmpass){
+           return this.setState({error : "Your Password should be the same"})
+       }
+       return this.setState({error : ''})
+  
+
+    }
+
+     onInputChange=(event)=>{
+       this.setState({
+           obj: {...this.state.obj,
+           [event.target.name]: event.target.value}
+       })
+    }
+   
+    render(){
+        return(
+            <>
+            <h1>React Form</h1>
+            <div className = "ui segment">
+                <form
+                className = "ui form"
+                >
+                    {this.state.obj.error &&
+                       <h2 data-test = "error" onClick = {this.newError}>
+                           <button 
+                           className = " ui red button"
+                    onClick = {this.newError}>Missing </button>
+                           {this.state.error}
+                       </h2>
+                    }
+                    <label>Username</label>
+                   <input 
+                   name = "username"
+                   placeholder = "Enter Username"
+                   type= "text"
+                   value= {this.state.username}
+                   onChange = {this.onInputChange}
+                
+                   
+                   />
+                      <label>Email</label>
+                    <input 
+                     name = "email"
+                   placeholder = "Enter Email"
+                   type= "text"
+                   value= {this.state.email}
+                   onChange = {this.onInputChange}
+                   
+                   />
+                      <label>Password</label>
+                    <input 
+                     name = "password"
+                   placeholder = "Enter Password"
+                   type= "text"
+                   value= {this.state.password}
+                   onChange = {this.onInputChange}
+                   
+                   />
+                      <label>Confirm Password</label>
+                     <input 
+                      name = "confirmpass"
+                   placeholder = "Confirm Password"
+                   type= "text"
+                   value= {this.state.confirmpass}
+                   onChange = {this.onInputChange}
+                   />
+
+                </form>
+                <button 
+                onClick  = {this.onhandleSubmit}
+                className = " ui primary button">Submit</button>
+            </div>
+    
+            </>
+        )
+    }
+}
+
+
+export default App
